@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import BadgeCard from '../components/BadgeCard'
 import { downloadText } from '../lib/download'
 import { deleteRitual, loadRituals } from '../lib/storage'
+import { makeSocialBadge } from '../lib/socialBadge'
 
 // Turns "2026-10-11T14:03:00.000Z" into something like "11 October 2026".
 function formatDate(iso: string): string {
@@ -66,15 +67,17 @@ export default function Archive() {
           <li key={ritual.id} className="border-t border-stone-200 pt-6">
             <p className="text-sm text-stone-400">{formatDate(ritual.sealedAt)}</p>
 
-            {ritual.badges.length === 0 ? (
-              <p className="mt-3 text-stone-500">No badges for this one.</p>
-            ) : (
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                {ritual.badges.map((badge) => (
-                  <BadgeCard key={badge.quote} badge={badge} />
-                ))}
-              </div>
+                       {ritual.badges.length === 0 && (
+              <p className="mt-3 text-stone-500">
+                The model named no badges for this one.
+              </p>
             )}
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              {ritual.badges.map((badge) => (
+                <BadgeCard key={badge.quote} badge={badge} />
+              ))}
+              <BadgeCard badge={makeSocialBadge(ritual.reflection)} />
+            </div>
 
             <details className="mt-4 text-stone-600">
               <summary className="cursor-pointer text-sm text-stone-500">

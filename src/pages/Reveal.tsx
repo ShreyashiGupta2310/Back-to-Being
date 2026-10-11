@@ -6,6 +6,7 @@ import { askForBadges, listModels, pickDefaultModel } from '../lib/ollama'
 import { loadDraft, saveBadges, sealDraft, type ritual } from '../lib/storage'
 import { countWords, MIN_REFLECTION_WORDS } from '../lib/text'
 import { verifyBadges, type VerifyResult } from '../lib/verify'
+import { makeSocialBadge } from '../lib/socialBadge'
 
 
 type BadgeRun =
@@ -104,8 +105,18 @@ export default function Reveal() {
             )}
           </div>
         )}
-
+        <div className="mt-8">
+          <p className="text-sm text-stone-400">For sharing it with someone</p>
+          <div className="mt-3">
+            <BadgeCard badge={makeSocialBadge(ritual.reflection)} />
+          </div>
+          <p className="mt-2 text-sm text-stone-400">
+            This one comes from the act of sharing. It does not depend on the
+            model or on how kind the words were.
+          </p>
+        </div>
         {canRetry && (
+          
           <button
             type="button"
             onClick={() => runModel(ritual)}
