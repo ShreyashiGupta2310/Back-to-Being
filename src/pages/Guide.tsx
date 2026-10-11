@@ -39,6 +39,13 @@ export default function Guide() {
       </Link>
       <p className="mt-3 text-sm text-stone-400">
         Not yet? Go outside first, and come back once a little time has passed.
+
+        <p className="mt-6 text-sm text-stone-500">
+        No local model installed?{' '}
+        <Link to="/demo" className="underline">
+          See a saved example
+        </Link>
+      </p>
       </p>
     </div>
   )
