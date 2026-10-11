@@ -1,42 +1,51 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { loadDraft, sealDraft, type ritual } from '../lib/storage'
-import { countWords, MIN_REFLECTION_WORDS } from '../lib/text'
+import BadgeCard from '../components/BadgeCard'
 import ModelStatus from '../components/ModelStatus'
 import { askForBadges, listModels, pickDefaultModel } from '../lib/ollama'
-
+import { loadDraft, saveBadges, sealDraft, type ritual } from '../lib/storage'
+import { countWords, MIN_REFLECTION_WORDS } from '../lib/text'
 import { verifyBadges, type VerifyResult } from '../lib/verify'
+
+
 type BadgeRun =
   | { state: 'working' }
   | { state: 'done'; result: VerifyResult }
   | { state: 'failed'; message: string }
 
-
 export default function Reveal() {
   const [ritual, setRitual] = useState<ritual | null>(null)
   const [run, setRun] = useState<BadgeRun | null>(null)
 
-async  function handleSeal() {
-   const sealed = sealDraft()
-    setRitual(sealDraft())
+ 
+  async function runModel(sealed: ritual) {
     setRun({ state: 'working' })
-
-
-       try {
+    try {
       const model = pickDefaultModel(await listModels())
       if (!model) throw new Error('No model is installed in Ollama')
       const candidates = await askForBadges(model, sealed.writing)
-      setRun({ state: 'done', result: verifyBadges(sealed.writing, candidates) })
+      const result = verifyBadges(sealed.writing, candidates)
+      saveBadges(sealed.id, result.verified)
+      setRun({ state: 'done', result })
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Something went wrong'
       setRun({ state: 'failed', message })
     }
-  
-
-
   }
-// if already sealed then
- if (ritual) {
+
+ 
+  function handleSeal() {
+    const sealed = sealDraft()
+    setRitual(sealed)
+    runModel(sealed)
+  }
+
+  // Screen 1: already sealed.
+  if (ritual) {
+    const canRetry =
+      run?.state === 'failed' ||
+      (run?.state === 'done' && run.result.verified.length === 0)
+
     return (
       <div>
         <h1 className="text-2xl font-medium">Sealed</h1>
@@ -61,22 +70,16 @@ async  function handleSeal() {
           <div className="mt-6">
             {run.result.verified.length === 0 ? (
               <p className="text-stone-500">
-                No badges this time. The model did not find details it could
-                point to in your words.
+                No badges this time. That can happen with short or summary-style
+                writing, because the model only names things it can quote
+                exactly. Your words are still sealed, and you can ask the model
+                again.
               </p>
             ) : (
-              <ul className="space-y-4">
+              <ul className="space-y-6">
                 {run.result.verified.map((badge) => (
-                  <li
-                    key={badge.quote}
-                    className="rounded-md border border-stone-200 bg-white p-4"
-                  >
-                    <p className="text-xs uppercase tracking-wide text-stone-400">
-                      {badge.category}
-                    </p>
-                    <h2 className="mt-1 text-lg font-medium">{badge.title}</h2>
-                    <p className="mt-1 text-stone-600">{badge.meaning}</p>
-                    <p className="mt-2 text-sm text-stone-500">“{badge.quote}”</p>
+                  <li key={badge.quote}>
+                    <BadgeCard badge={badge} />
                   </li>
                 ))}
               </ul>
@@ -102,15 +105,26 @@ async  function handleSeal() {
           </div>
         )}
 
-        <Link to="/archive" className="mt-6 inline-block text-stone-800 underline">
-          See the archive
-        </Link>
+        {canRetry && (
+          <button
+            type="button"
+            onClick={() => runModel(ritual)}
+            className="mt-6 rounded-md border border-stone-300 px-4 py-2 text-stone-700 hover:bg-stone-100"
+          >
+            Ask the model again
+          </button>
+        )}
+
+        <div>
+          <Link to="/archive" className="mt-6 inline-block text-stone-800 underline">
+            See the archive
+          </Link>
+        </div>
       </div>
     )
   }
 
-
-  // Not ready: send them back instead of sealing something half-finished.
+  // Screen 2: not ready.
   const draft = loadDraft()
   const ready =
     draft.writing.trim() !== '' &&
@@ -135,9 +149,7 @@ async  function handleSeal() {
     )
   }
 
-  // if Ready: explain what sealing does and offer the button.
-
-  return  (
+  return (
     <div>
       <h1 className="text-2xl font-medium">Seal your words</h1>
       <p className="mt-3 text-stone-600">
@@ -145,7 +157,7 @@ async  function handleSeal() {
         running on this computer reads it and names your badges. Nothing leaves
         your device.
       </p>
-       <ModelStatus />
+      <ModelStatus />
       <button
         type="button"
         onClick={handleSeal}
