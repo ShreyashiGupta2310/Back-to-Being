@@ -81,3 +81,16 @@ export function sealDraft(): ritual {
   if (saved) clearDraft() 
   return ritual
 }
+
+
+export function saveBadges(ritualId: string, badges: badge[]): boolean {
+  try {
+    const updated = loadRituals().map((ritual) =>
+      ritual.id === ritualId ? { ...ritual, badges } : ritual,
+    )
+    localStorage.setItem(RITUALS_KEY, JSON.stringify(updated))
+    return true
+  } catch {
+    return false
+  }
+}
