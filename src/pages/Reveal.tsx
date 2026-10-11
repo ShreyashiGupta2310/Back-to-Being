@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { loadDraft, sealDraft, type ritual } from '../lib/storage'
 import { countWords, MIN_REFLECTION_WORDS } from '../lib/text'
-
+import ModelStatus from '../components/ModelStatus'
 export default function Reveal() {
   const [ritual, setRitual] = useState<ritual | null>(null)
    function handleSeal() {
@@ -59,6 +59,7 @@ if (ritual) {
         running on this computer reads it and names your badges. Nothing leaves
         your device.
       </p>
+       <ModelStatus />
       <button
         type="button"
         onClick={handleSeal}
