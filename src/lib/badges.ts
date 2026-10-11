@@ -5,6 +5,7 @@ export const BADGE_CATEGORIES= [
    'taste',
    'people',
    'feeling',
+   'moment'
 ] as const
 
 export type BadgeCategory = (typeof BADGE_CATEGORIES)[number]
