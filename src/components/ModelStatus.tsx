@@ -35,12 +35,12 @@ export default function ModelStatus() {
   }, [])
 
   if (status.state === 'checking') {
-    return <p className="mt-6 text-sm text-stone-400">Looking for a local model...</p>
+    return <p className="mt-6 text-sm text-leaf-400">Looking for a local model...</p>
   }
 
   if (status.state === 'ready') {
     return (
-      <p className="mt-6 text-sm text-stone-500">
+      <p className="mt-6 text-sm text-leaf-500">
         Local model ready: {status.model}
       </p>
     )
@@ -48,7 +48,7 @@ export default function ModelStatus() {
 
   if (status.state === 'no-models') {
     return (
-      <p className="mt-6 text-sm text-stone-500">
+      <p className="mt-6 text-sm text-leaf-500">
         Ollama is running, but no models are installed yet. Run{' '}
         <code>ollama pull gemma4:e2b</code> in a terminal.
       </p>
@@ -56,7 +56,7 @@ export default function ModelStatus() {
   }
 
   return (
-    <p className="mt-6 text-sm text-stone-500">
+    <p className="mt-6 text-sm text-leaf-500">
       Can't reach Ollama. Make sure it is running and that OLLAMA_ORIGINS is set
       to http://localhost:5173, then restart Ollama.
     </p>

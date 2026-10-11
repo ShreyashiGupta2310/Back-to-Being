@@ -37,10 +37,10 @@ export default function Archive() {
     return (
       <div>
         <h1 className="text-2xl font-medium">Your archive</h1>
-        <p className="mt-3 text-stone-600">
+        <p className="mt-3 text-leaf-600">
           Nothing here yet. Sealed rituals will appear on this shelf.
         </p>
-        <Link to="/" className="mt-6 inline-block text-stone-800 underline">
+        <Link to="/" className="mt-6 inline-block text-leaf-800 underline">
           Start from the guide
         </Link>
       </div>
@@ -50,25 +50,25 @@ export default function Archive() {
   return (
     <div>
       <h1 className="text-2xl font-medium">Your archive</h1>
-      <p className="mt-3 text-stone-600">
+      <p className="mt-3 text-leaf-600">
         Everything here is stored only in this browser, on this device. Clearing
         your browser data erases it, so export a copy now and then.
       </p>
       <button
         type="button"
         onClick={handleExport}
-        className="mt-5 rounded-md border border-stone-300 px-4 py-2 text-stone-700 hover:bg-stone-100"
+        className="mt-5 rounded-md border border-leaf-300 px-4 py-2 text-leaf-700 hover:bg-leaf-100"
       >
         Export everything
       </button>
 
       <ul className="mt-8 space-y-10">
         {rituals.map((ritual) => (
-          <li key={ritual.id} className="border-t border-stone-200 pt-6">
-            <p className="text-sm text-stone-400">{formatDate(ritual.sealedAt)}</p>
+          <li key={ritual.id} className="border-t border-leaf-200 pt-6">
+            <p className="text-sm text-leaf-400">{formatDate(ritual.sealedAt)}</p>
 
                        {ritual.badges.length === 0 && (
-              <p className="mt-3 text-stone-500">
+              <p className="mt-3 text-leaf-500">
                 The model named no badges for this one.
               </p>
             )}
@@ -79,13 +79,13 @@ export default function Archive() {
               <BadgeCard badge={makeSocialBadge(ritual.reflection)} />
             </div>
 
-            <details className="mt-4 text-stone-600">
-              <summary className="cursor-pointer text-sm text-stone-500">
+            <details className="mt-4 text-leaf-600">
+              <summary className="cursor-pointer text-sm text-leaf-500">
                 Read the words
               </summary>
-              <h2 className="mt-3 text-sm font-medium text-stone-500">What you wrote</h2>
+              <h2 className="mt-3 text-sm font-medium text-leaf-500">What you wrote</h2>
               <p className="mt-1 whitespace-pre-wrap">{ritual.writing}</p>
-              <h2 className="mt-4 text-sm font-medium text-stone-500">
+              <h2 className="mt-4 text-sm font-medium text-leaf-500">
                 What your listener wrote
               </h2>
               <p className="mt-1 whitespace-pre-wrap">{ritual.reflection}</p>
@@ -94,7 +94,7 @@ export default function Archive() {
             <button
               type="button"
               onClick={() => handleDelete(ritual.id)}
-              className="mt-4 text-sm text-stone-400 underline hover:text-stone-700"
+              className="mt-4 text-sm text-leaf-400 underline hover:text-leaf-700"
             >
               Delete this ritual
             </button>

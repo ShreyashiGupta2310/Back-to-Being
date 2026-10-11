@@ -2,12 +2,12 @@ import { Link, Outlet } from 'react-router-dom'
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-800">
+    <div className="min-h-screen bg-leaf-50 text-leaf-800">
       <header className="mx-auto flex max-w-2xl items-center justify-between px-6 py-5">
         <Link to="/" className="text-lg font-medium">
           Back to Being
         </Link>
-        <Link to="/archive" className="text-sm text-stone-500 hover:text-stone-800">
+        <Link to="/archive" className="text-sm text-leaf-500 hover:text-leaf-800">
           Archive
         </Link>
       </header>

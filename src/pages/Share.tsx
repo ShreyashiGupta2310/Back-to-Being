@@ -26,8 +26,8 @@ export default function Share() {
     return (
       <div>
         <h1 className="text-2xl font-medium">Share it</h1>
-        <p className="mt-3 text-stone-600">Nothing has been written yet.</p>
-        <Link to="/write" className="mt-6 inline-block text-stone-800 underline">
+        <p className="mt-3 text-leaf-600">Nothing has been written yet.</p>
+        <Link to="/write" className="mt-6 inline-block text-leaf-800 underline">
           Go back and write first
         </Link>
       </div>
@@ -37,12 +37,12 @@ export default function Share() {
   return (
     <div>
       <h1 className="text-2xl font-medium">Share it</h1>
-      <p className="mt-3 text-stone-600">
+      <p className="mt-3 text-leaf-600">
         Read this, or have it read to you. Then the listener writes a few lines
         of their own: what they found interesting, surprising, or new.
       </p>
 
-      <div className="mt-6 whitespace-pre-wrap rounded-md bg-stone-100 p-4 leading-relaxed text-stone-700">
+      <div className="mt-6 whitespace-pre-wrap rounded-md bg-leaf-100 p-4 leading-relaxed text-leaf-700">
         {writing}
       </div>
 
@@ -53,21 +53,21 @@ export default function Share() {
         onPaste={(e) => e.preventDefault()}
         spellCheck={false}
         placeholder="In your own words, with no pasting..."
-        className="mt-3 h-48 w-full resize-none rounded-md border border-stone-300 bg-white p-4 leading-relaxed focus:border-stone-500 focus:outline-none"
+        className="mt-3 h-48 w-full resize-none rounded-md border border-leaf-300 bg-white p-4 leading-relaxed focus:border-leaf-500 focus:outline-none"
       />
-      <p className="mt-2 text-sm text-stone-400">
+      <p className="mt-2 text-sm text-leaf-400">
         {words} of {MIN_WORDS} words. Saved on this device as you type.
       </p>
 
       {longEnough ? (
         <Link
           to="/reveal"
-          className="mt-8 inline-block rounded-md bg-stone-800 px-5 py-2.5 text-stone-50 hover:bg-stone-700"
+          className="mt-8 inline-block rounded-md bg-leaf-800 px-5 py-2.5 text-leaf-50 hover:bg-leaf-700"
         >
           We're both finished
         </Link>
       ) : (
-        <span className="mt-8 inline-block cursor-not-allowed rounded-md bg-stone-800 px-5 py-2.5 text-stone-50 opacity-40">
+        <span className="mt-8 inline-block cursor-not-allowed rounded-md bg-leaf-800 px-5 py-2.5 text-leaf-50 opacity-40">
           We're both finished
         </span>
       )}

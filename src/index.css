@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+@theme {
+  /* The palette: pale mist green (50) to deep forest green (900). */
+  --color-leaf-50: #f4f9f0;
+  --color-leaf-100: #e8f3e1;
+  --color-leaf-200: #d2e7c7;
+  --color-leaf-300: #b3d6a3;
+  --color-leaf-400: #6f9f60;
+  --color-leaf-500: #4f8046;
+  --color-leaf-600: #3f6a3a;
+  --color-leaf-700: #335730;
+  --color-leaf-800: #284527;
+  --color-leaf-900: #1b2f1d;
+
+  /* Heading font: fonts already on the computer, so nothing is downloaded. */
+  --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+}
+
+@layer base {
+  h1 {
+    font-family: var(--font-display);
+  }
+}
