@@ -27,3 +27,9 @@ export function wrapText(text: string, maxChars: number, maxLines: number): stri
   }
   return lines
 }
+
+export function firstWords(text: string, count: number): string {
+  const words = text.trim().split(/\s+/).filter(Boolean)
+  if (words.length <= count) return words.join(' ')
+  return words.slice(0, count).join(' ') + '…'
+}
