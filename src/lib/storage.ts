@@ -94,3 +94,13 @@ export function saveBadges(ritualId: string, badges: badge[]): boolean {
     return false
   }
 }
+// Removes one sealed ritual for good.
+export function deleteRitual(ritualId: string): boolean {
+  try {
+    const remaining = loadRituals().filter((ritual) => ritual.id !== ritualId)
+    localStorage.setItem(RITUALS_KEY, JSON.stringify(remaining))
+    return true
+  } catch {
+    return false
+  }
+}
