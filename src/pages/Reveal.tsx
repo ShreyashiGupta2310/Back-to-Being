@@ -3,10 +3,37 @@ import { Link } from 'react-router-dom'
 import { loadDraft, sealDraft, type ritual } from '../lib/storage'
 import { countWords, MIN_REFLECTION_WORDS } from '../lib/text'
 import ModelStatus from '../components/ModelStatus'
+import { askForBadges, listModels, pickDefaultModel } from '../lib/ollama'
+import type { badge } from '../lib/badges'
+
+type BadgeRun =
+  | { state: 'working' }
+  | { state: 'done'; badges: badge[] }
+  | { state: 'failed'; message: string }
+
+
 export default function Reveal() {
   const [ritual, setRitual] = useState<ritual | null>(null)
-   function handleSeal() {
+  const [run, setRun] = useState<BadgeRun | null>(null)
+
+async  function handleSeal() {
+   const sealed = sealDraft()
     setRitual(sealDraft())
+    setRun({ state: 'working' })
+
+
+       try {
+      const model = pickDefaultModel(await listModels())
+      if (!model) throw new Error('No model is installed in Ollama')
+      const badges = await askForBadges(model, sealed.writing)
+      setRun({ state: 'done', badges })
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Something went wrong'
+      setRun({ state: 'failed', message })
+    }
+  
+
+
   }
 // if already sealed then
 if (ritual) {
@@ -14,9 +41,33 @@ if (ritual) {
       <div>
         <h1 className="text-2xl font-medium">Sealed</h1>
         <p className="mt-3 text-stone-600">
-          Your words are locked. Nothing in this app can change them now. Next, a
-          small model on this computer will read them and name your badges.
+          Your words are locked. Nothing in this app can change them now.
         </p>
+
+                  {run?.state === 'working' && (
+          <p className="mt-6 text-stone-500">
+            Reading your words... the first time can take a minute while the
+            model loads.
+          </p>
+        )}
+
+        {run?.state === 'failed' && (
+          <p className="mt-6 text-stone-500">
+            Your words are safely sealed. The model had a problem: {run.message}
+          </p>
+        )}
+
+        {run?.state === 'done' && (
+          <div className="mt-6">
+            <p className="text-sm text-stone-400">
+              Raw model output (not checked yet)
+            </p>
+            <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-md bg-stone-100 p-4 text-sm text-stone-700">
+              {JSON.stringify(run.badges, null, 2)}
+            </pre>
+          </div>
+        )}
+
         <Link to="/archive" className="mt-6 inline-block text-stone-800 underline">
           See the archive
         </Link>
