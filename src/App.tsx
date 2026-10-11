@@ -5,6 +5,7 @@ import Write from './pages/Write'
 import Share from './pages/Share'
 import Reveal from './pages/Reveal'
 import Archive from './pages/Archive'
+import Demo from './pages/Demo'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/share" element={<Share />} />
         <Route path="/reveal" element={<Reveal />} />
         <Route path="/archive" element={<Archive />} />
+        <Route path="/demo" element={<Demo />} />
       </Route>
     </Routes>
   )
