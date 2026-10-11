@@ -1,4 +1,3 @@
-import type { badge } from './badges'
 import { BADGE_SCHEMA, BADGE_SYSTEM_PROMPT } from './prompt'
 const OLLAMA_URL = 'http://localhost:11434'
 
@@ -26,7 +25,7 @@ export function pickDefaultModel(models: string[]): string | null {
 }
 
 
-export async function askForBadges(model: string, writing: string): Promise<badge[]> {
+export async function askForBadges(model: string, writing: string): Promise<unknown[]> {
   const response = await fetch(`${OLLAMA_URL}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

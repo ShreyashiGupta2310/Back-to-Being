@@ -4,11 +4,11 @@ import { loadDraft, sealDraft, type ritual } from '../lib/storage'
 import { countWords, MIN_REFLECTION_WORDS } from '../lib/text'
 import ModelStatus from '../components/ModelStatus'
 import { askForBadges, listModels, pickDefaultModel } from '../lib/ollama'
-import type { badge } from '../lib/badges'
 
+import { verifyBadges, type VerifyResult } from '../lib/verify'
 type BadgeRun =
   | { state: 'working' }
-  | { state: 'done'; badges: badge[] }
+  | { state: 'done'; result: VerifyResult }
   | { state: 'failed'; message: string }
 
 
@@ -25,8 +25,8 @@ async  function handleSeal() {
        try {
       const model = pickDefaultModel(await listModels())
       if (!model) throw new Error('No model is installed in Ollama')
-      const badges = await askForBadges(model, sealed.writing)
-      setRun({ state: 'done', badges })
+      const candidates = await askForBadges(model, sealed.writing)
+      setRun({ state: 'done', result: verifyBadges(sealed.writing, candidates) })
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Something went wrong'
       setRun({ state: 'failed', message })
@@ -36,7 +36,7 @@ async  function handleSeal() {
 
   }
 // if already sealed then
-if (ritual) {
+ if (ritual) {
     return (
       <div>
         <h1 className="text-2xl font-medium">Sealed</h1>
@@ -44,7 +44,7 @@ if (ritual) {
           Your words are locked. Nothing in this app can change them now.
         </p>
 
-                  {run?.state === 'working' && (
+        {run?.state === 'working' && (
           <p className="mt-6 text-stone-500">
             Reading your words... the first time can take a minute while the
             model loads.
@@ -59,12 +59,46 @@ if (ritual) {
 
         {run?.state === 'done' && (
           <div className="mt-6">
-            <p className="text-sm text-stone-400">
-              Raw model output (not checked yet)
-            </p>
-            <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-md bg-stone-100 p-4 text-sm text-stone-700">
-              {JSON.stringify(run.badges, null, 2)}
-            </pre>
+            {run.result.verified.length === 0 ? (
+              <p className="text-stone-500">
+                No badges this time. The model did not find details it could
+                point to in your words.
+              </p>
+            ) : (
+              <ul className="space-y-4">
+                {run.result.verified.map((badge) => (
+                  <li
+                    key={badge.quote}
+                    className="rounded-md border border-stone-200 bg-white p-4"
+                  >
+                    <p className="text-xs uppercase tracking-wide text-stone-400">
+                      {badge.category}
+                    </p>
+                    <h2 className="mt-1 text-lg font-medium">{badge.title}</h2>
+                    <p className="mt-1 text-stone-600">{badge.meaning}</p>
+                    <p className="mt-2 text-sm text-stone-500">“{badge.quote}”</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {run.result.rejected.length > 0 && (
+              <details className="mt-6 text-sm text-stone-500">
+                <summary className="cursor-pointer">
+                  {run.result.rejected.length} suggestion(s) left out
+                </summary>
+                <ul className="mt-2 space-y-3">
+                  {run.result.rejected.map((item, index) => (
+                    <li key={index}>
+                      <span className="text-stone-700">{item.reason}</span>
+                      <pre className="mt-1 overflow-x-auto whitespace-pre-wrap rounded-md bg-stone-100 p-2 text-xs">
+                        {JSON.stringify(item.badge, null, 2)}
+                      </pre>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
           </div>
         )}
 
@@ -74,6 +108,7 @@ if (ritual) {
       </div>
     )
   }
+
 
   // Not ready: send them back instead of sealing something half-finished.
   const draft = loadDraft()
