@@ -133,7 +133,7 @@ src/
   components/                Layout, BadgeCard, ModelStatus, Leaf, LeafSprig
   lib/
     ollama.ts                list models, ask for badges
-    prompts.ts               the system prompt and the JSON answer form
+    prompt.ts               the system prompt and the JSON answer form
     verify.ts (+ test)       the quote checker
     socialBadge.ts (+ test)  the Social Badge, given by plain code
     storage.ts               drafts, sealed rituals, saving badges
