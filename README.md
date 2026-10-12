@@ -159,7 +159,7 @@ src/
 
 ## AI assistance
 
-I used Claude as a coding tutor and pair while building this: explaining the steps, reviewing my code, and suggesting files that I then typed, ran and committed myself. _Edit this line so it matches how you actually worked._
+I used Claude, an AI assistant, while building this. The idea, the ritual and how the app should feel are mine. I made the product decisions, ran and tested everything, debugged problems as they came up, and deployed it. Claude suggested architecture, explained each file as I went, and wrote or suggested a good part of the code, which I typed in, changed where needed and committed.most parts I wrote myself.
 
 ## Commits after the deadline
 
