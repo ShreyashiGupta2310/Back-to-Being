@@ -165,21 +165,6 @@ I used Claude as a coding tutor and pair while building this: explaining the ste
 
 The submission deadline is October 11, 2026, 11:59 PM PDT. Any commit made after it will be listed here. _None so far._
 
-<details>
-<summary><b>Screenshots</b> (click to open)</summary>
+## License
 
-<br>
-
-**The saved example on the demo page.** Three badges named by the local model, each backed by an exact quote, plus the Social Badge from plain code.
-
-<img src="docs/screenshots/badges-demo.png" alt="Demo page showing three model badges and the Shared and Heard badge" width="700">
-
-**The browser asks before a hosted page can reach a model on your own computer.**
-
-<img src="docs/screenshots/permission-prompt.png" alt="Chrome permission prompt on the live site" width="700">
-
-**My real ritual, saved in the archive.** I didn't allow that permission, so the model couldn't run. No model badges appear, but the Social Badge still does, because plain code gives it.
-
-<img src="docs/screenshots/archive-without-model.png" alt="Archive showing a real ritual with only the Shared and Heard badge" width="700">
-
-</details>
+[MIT](LICENSE)
